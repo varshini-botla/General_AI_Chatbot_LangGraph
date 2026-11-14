@@ -1,0 +1,39 @@
+# Environment variables and secrets
+.env
+*.env
+!.env.example
+
+# Python virtual environment
+.venv/
+venv/
+ENV/
+env/
+
+# Byte-compiled / optimized files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Testing and cache
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Local databases and checkpoint stores
+*.sqlite
+*.sqlite3
+*.db
+data/*.sqlite
+data/*.db
+data/*.sqlite3
+
+# LangGraph and IDE caches
+.langgraph/
+.vscode/
+.idea/
+
+# Operating system files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
