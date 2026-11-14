@@ -21,5 +21,5 @@ COPY data/ ./data/
 
 EXPOSE 8000
 
-# Start LangGraph dev/server on 0.0.0.0
-CMD ["langgraph", "dev", "--host", "0.0.0.0", "--port", "8000", "--no-browser"]
+# Start LangGraph Agent Server dynamically using platform PORT
+CMD ["sh", "-c", "langgraph dev --host 0.0.0.0 --port ${PORT:-8000} --no-browser"]
