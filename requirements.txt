@@ -6,3 +6,5 @@ python-dotenv>=1.0.0
 langsmith>=0.2.0
 pytest>=8.0.0
 langgraph-cli[inmem]>=0.1.65
+fastapi>=0.110.0
+uvicorn>=0.29.0

@@ -16,10 +16,10 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application files
-COPY agent.py langgraph.json ./
+COPY agent.py server.py langgraph.json ./
 COPY data/ ./data/
 
 EXPOSE 8000
 
-# Start LangGraph Agent Server dynamically using platform PORT
-CMD ["sh", "-c", "langgraph dev --host 0.0.0.0 --port ${PORT:-8000} --no-browser"]
+# Start Web Server with ChatGPT-style UI and LangGraph backend
+CMD ["sh", "-c", "uvicorn server:app --host 0.0.0.0 --port ${PORT:-8000}"]
