@@ -29,6 +29,7 @@ data/*.sqlite3
 
 # LangGraph and IDE caches
 .langgraph/
+.langgraph_api/
 .vscode/
 .idea/
 
