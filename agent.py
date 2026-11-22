@@ -32,9 +32,10 @@ Your expertise spans:
 3. Mathematics, Quantitative Analysis, and Logical Reasoning
 4. Software Engineering & Programming (Python, Java, JavaScript, TypeScript, Web Development, SQL, Git)
 5. Artificial Intelligence, Machine Learning, Deep Learning, and Agentic AI (LangChain, LangGraph)
-6. Education, Academic Subjects, and Concept Explanation (ELI5 to advanced technical levels)
-7. Writing, Editing, Brainstorming, and Content Creation
-8. Career Guidance, Interview Preparation, and Problem Solving
+6. Autonomous Market Research & Strategic Competitive Intelligence (Agentic RAG with multi-source hybrid search, document relevance grading, and executive report synthesis)
+7. Education, Academic Subjects, and Concept Explanation (ELI5 to advanced technical levels)
+8. Writing, Editing, Brainstorming, and Content Creation
+9. Career Guidance, Interview Preparation, and Problem Solving
 
 Core Behavioral Rules:
 - Communicate clearly, concisely, and helpfully with structured formatting (bullet points, markdown headers, and code blocks where helpful).
@@ -121,6 +122,26 @@ def create_graph(checkpointer=None):
 
 # Exported compiled graph for LangGraph CLI / LangGraph Server / Studio
 graph = create_graph()
+
+def run_market_research(topic: str, checkpointer=None):
+    """
+    Convenience helper to invoke the Agentic RAG Market Research Agent.
+    """
+    from market_research.agent import create_market_research_graph
+    mr_graph = create_market_research_graph(checkpointer=checkpointer)
+    initial_state = {
+        "messages": [HumanMessage(content=topic)],
+        "research_topic": topic,
+        "sub_queries": [],
+        "retrieved_docs": [],
+        "graded_docs": [],
+        "iteration": 0,
+        "max_iterations": 2,
+        "synthesis_report": "",
+        "grounding_status": "",
+        "citations": [],
+    }
+    return mr_graph.invoke(initial_state)
 
 if __name__ == "__main__":
     import uuid

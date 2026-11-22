@@ -398,11 +398,64 @@ pytest>=8.0.0
 langgraph-cli[inmem]>=0.1.65
 fastapi>=0.110.0
 uvicorn>=0.29.0
+scikit-learn>=1.4.0
+rank-bm25>=0.2.2
+wikipedia>=1.4.0
+beautifulsoup4>=4.12.0
+duckduckgo-search>=7.0.0
 ```
 
 ---
 
-## 7. ROLES & CONTRIBUTIONS BREAKDOWN
+## 7. STAGE 22: EXTENSION — AUTONOMOUS MARKET RESEARCH AGENT (AGENTIC RAG)
+
+### 7.1 Architecture & Agentic RAG Framework
+Building directly on top of the existing LangGraph foundation without creating an isolated separate project, we added a dedicated **Market Research Agent implementing Agentic RAG Techniques**.
+
+Unlike traditional "naive" RAG (which blindly fetches top-k vector chunks and answers directly), **Agentic RAG** treats retrieval and synthesis as an autonomous, iterative decision-making loop:
+
+```text
+[START]
+   │
+   ▼
+[plan_queries] ────────► Decomposes topic into 3-4 sub-queries (TAM, Competitors, Drivers, Risks)
+   │
+   ▼
+[retrieve] ────────────► Multi-source hybrid retrieval (BM25 + TF-IDF Knowledge Base + Wikipedia + Web)
+   │
+   ▼
+[grade_documents] ─────► Self-Reflective Document Grading (Corrective RAG) filters noise
+   │
+   ├── (Insufficient evidence & under max iterations) ──► [rewrite_query] ──► [retrieve]
+   │
+   └── (Sufficient high-quality evidence)
+         │
+         ▼
+[synthesize_report] ───► Generates executive-level C-Suite Market Research Report
+         │
+         ▼
+[verify_grounding] ────► Cross-checks factual grounding against retrieved sources (anti-hallucination)
+         │
+         ▼
+       [END]
+```
+
+### 7.2 Core Agentic RAG Techniques Implemented
+1. **Dynamic Query Planning & Decomposition**: Decomposes open-ended market inquiries into specialized sub-queries targeting TAM/CAGR, competitor matrices, technological catalysts, and SWOT risks.
+2. **Multi-Source Hybrid Retrieval (BM25 + TF-IDF)**: Implemented in `market_research/knowledge_base.py` and `market_research/tools.py`. Combines exact keyword BM25 scoring with dense TF-IDF cosine similarity and multi-source web fallbacks.
+3. **Self-Reflective Document Grading (Self-RAG / CRAG)**: Assesses evidence quality, prunes irrelevant chunks, and extracts high-confidence data points.
+4. **Adaptive Query Reformulation**: If evidence is insufficient, formulates alternative broader queries and iterates.
+5. **Structured C-Suite Market Synthesis**: Produces executive research reports with TAM/SAM/SOM sizing, competitor benchmarking, growth drivers, SWOT analysis, and GTM strategies.
+6. **Grounding Verification & Citation Tracking**: Enforces strict grounding in cited evidence, eliminating hallucinations.
+
+### 7.3 Multi-Agent Integration into Existing Server & UI
+- Registered in `langgraph.json` as `market_research`.
+- Exposed in `server.py` via `/api/market-research` and unified `/api/chat` with dynamic mode routing (`general` vs `market_research`).
+- Web interface updated with a sleek dual-mode switcher allowing 1-click toggling between General Assistant and Market Research Agent with dynamic query chips, live RAG status badges, and source citation blocks.
+
+---
+
+## 8. ROLES & CONTRIBUTIONS BREAKDOWN
 
 ### Student / Developer Responsibilities (Botla Varshini):
 1. Project goal definition and requirement specification.

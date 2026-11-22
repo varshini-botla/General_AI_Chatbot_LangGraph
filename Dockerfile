@@ -17,6 +17,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application files
 COPY agent.py server.py langgraph.json ./
+COPY market_research/ ./market_research/
 COPY data/ ./data/
 
 EXPOSE 8000

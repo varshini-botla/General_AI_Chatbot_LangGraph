@@ -3,7 +3,8 @@
     "."
   ],
   "graphs": {
-    "agent": "./agent.py:graph"
+    "agent": "./agent.py:graph",
+    "market_research": "./market_research/agent.py:graph"
   },
   "env": ".env"
 }

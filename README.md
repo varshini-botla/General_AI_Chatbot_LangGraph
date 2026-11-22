@@ -137,8 +137,8 @@ python test_groq.py
 [SUCCESS] LangSmith automatic trace emitted to project: General-AI-Chatbot
 ```
 
-### 2. Run Automated Unit Tests
-Run the complete unit test suite (with mocked responses):
+### 2. Run Automated Unit & Agentic RAG Tests
+Run the complete test suite (17 passed):
 ```powershell
 python -m pytest tests -v
 ```
@@ -153,18 +153,83 @@ tests/test_config.py::test_get_llm_missing_key PASSED
 tests/test_config.py::test_langsmith_config_presence PASSED
 tests/test_memory.py::test_conversation_memory_multi_turn PASSED
 tests/test_memory.py::test_thread_isolation PASSED
+tests/test_market_research.py::test_knowledge_base_hybrid_search PASSED
+tests/test_market_research.py::test_default_knowledge_base_preloaded PASSED
+tests/test_market_research.py::test_tools_multi_source_retrieve PASSED
+tests/test_market_research.py::test_plan_queries_node PASSED
+tests/test_market_research.py::test_grade_documents_node PASSED
+tests/test_market_research.py::test_decide_to_generate_conditional_routing PASSED
+tests/test_market_research.py::test_market_research_graph_structure PASSED
+tests/test_market_research.py::test_market_research_end_to_end_mocked PASSED
 
-============================== 9 passed in 2.63s ==============================
+============================= 17 passed in 4.5s =============================
 ```
 
-### 3. Test Standalone Graph Execution & SQLite Memory
+### 3. Test Standalone Graph Executions & SQLite Memory
+
+**General AI Chatbot:**
 ```powershell
 python agent.py
 ```
 
+**Autonomous Market Research Agent (Agentic RAG):**
+```powershell
+python market_research/agent.py
+```
+
 ---
 
-## 6. Running LangGraph Studio Locally
+## 6. Autonomous Market Research Agent (Agentic RAG)
+
+Integrated directly into this repository is a specialized **Market Research Agent** implementing advanced **Agentic RAG Techniques**.
+
+### Agentic RAG Architecture
+```text
+User Topic
+    │
+    ▼
+[plan_queries] ────────► Decomposes topic into 3-4 sub-queries (TAM, Competitors, Drivers, Risks)
+    │
+    ▼
+[retrieve] ────────────► Multi-source hybrid retrieval (BM25 + TF-IDF Knowledge Base + Wikipedia + Web)
+    │
+    ▼
+[grade_documents] ─────► Self-Reflective Document Grading (Corrective RAG) filters noise
+    │
+    ├── (Insufficient evidence & under max iterations) ──► [rewrite_query] ──► [retrieve]
+    │
+    └── (Sufficient high-quality evidence)
+          │
+          ▼
+[synthesize_report] ───► Generates executive-level C-Suite Market Research Report
+          │
+          ▼
+[verify_grounding] ────► Cross-checks factual grounding against retrieved sources (anti-hallucination)
+          │
+          ▼
+        [END]
+```
+
+### Key Capabilities:
+1. **Dynamic Query Decomposition**: Splits broad market queries into focused research angles (Market Size & CAGR, Competitors, Technology Drivers, SWOT).
+2. **Hybrid Multi-Source Retrieval**: Combines BM25 lexical search with TF-IDF semantic scoring over internal intelligence reports, supplemented by Wikipedia and live web tools.
+3. **Self-Reflective Document Grading**: Filters out irrelevant noise and computes relevance scores before generation.
+4. **Iterative Query Reformulation**: Broadens search strategies automatically if retrieved chunks are insufficient.
+5. **Executive Framework Synthesis**: Automatically structures output with TAM/SAM/SOM sizing, competitor matrices, SWOT analysis, and GTM recommendations.
+6. **Grounding & Source Verification**: Enforces factual adherence to retrieved evidence with detailed citation tracking.
+
+### Interactive Web Application & Dual-Mode UI
+Start the interactive server:
+```powershell
+python server.py
+```
+Open `http://localhost:8000` in your browser:
+- **General Chat Mode**: ChatGPT-style multi-turn conversational AI with memory.
+- **Market Research Mode**: 1-click toggle to invoke the Agentic RAG Market Research Agent with real-time status badges, pre-configured research topics, citation inspection, and verified grounding tags.
+
+---
+
+## 7. Running LangGraph Studio Locally
 
 Start the local LangGraph development server:
 ```powershell

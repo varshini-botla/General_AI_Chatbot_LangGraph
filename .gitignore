@@ -20,12 +20,10 @@ __pycache__/
 htmlcov/
 
 # Local databases and checkpoint stores
-*.sqlite
-*.sqlite3
+*.sqlite*
 *.db
-data/*.sqlite
+data/*.sqlite*
 data/*.db
-data/*.sqlite3
 
 # LangGraph and IDE caches
 .langgraph/
